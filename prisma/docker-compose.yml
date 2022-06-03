@@ -15,8 +15,8 @@ services:
             connector: postgres
             host: ec2-54-73-152-36.eu-west-1.compute.amazonaws.com
             port: '5432'
-            database: deirasbm78239q
+            database: ${env:DATABASE_NAME}
             ssl: true
-            user: zskhvxmbhjhkbx
-            password: 7ba3e98a7b97be14c76d56ef134c3d11cd1cfd07d92d17d182884dfde535f607
+            user: ${env:DATABASE_USER}
+            password: ${env:DATABASE_PASSWORD}
             migrations: true
