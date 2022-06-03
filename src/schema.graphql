@@ -1,0 +1,121 @@
+# import UserOrderByInput, PostOrderByInput, CommentOrderByInput from './generated/prisma.graphql'
+
+type Query {
+    users(query: String, orderBy: UserOrderByInput, first: Int, skip: Int, after: String): [User!]!
+    me: User!
+    posts(query: String, orderBy: PostOrderByInput, first: Int, skip: Int, after: String): [Post!]!
+    myPosts(query: String, orderBy: PostOrderByInput, first: Int, skip: Int, after: String): [Post!]!
+    post(id: ID!): Post!
+    comments(orderBy: CommentOrderByInput, first: Int, skip: Int, after: String): [Comment!]!
+}
+
+type Mutation {
+    createUser(data: CreateUserInput!): AuthPayload!
+    loginUser(data: LoginUserInput!): AuthPayload!
+    updateUser(data: UpdateUserInput!): User!
+    deleteUser: User!
+    createPost(data: CreatePostInput!): Post!
+    updatePost(id: ID! data: UpdatePostInput!): Post!
+    deletePost(id: ID!): Post!
+    createComment(data: CreateCommentInput!): Comment!
+    updateComment(id: ID!, data: UpdateCommentInput!): Comment!
+    deleteComment(id: ID!): Comment!
+}
+
+type Subscription {
+    post(authorId: ID!): PostSubscriptionPayload!
+    comment(postId: ID!): CommentSubscriptionPayload!
+}
+
+input CreateUserInput {
+    name: String!
+    email: String!
+    password: String!
+}
+
+input LoginUserInput {
+    email: String!
+    password: String!
+}
+
+input UpdateUserInput {
+    name: String
+    email: String
+    password: String
+}
+
+input CreatePostInput {
+    title: String!
+    body: String!
+    published: Boolean!
+}
+
+input UpdatePostInput {
+    title: String
+    body: String
+    published: Boolean
+}
+
+input CreateCommentInput {
+    title: String!
+    body: String!
+    post: ID!
+}
+
+input UpdateCommentInput {
+    title: String
+    body: String
+}
+
+enum MutationType {
+    CREATED
+    UPDATED
+    DELETED
+}
+
+type PostSubscriptionPayload {
+    mutation: MutationType!
+    node: Post
+}
+
+type CommentSubscriptionPayload {
+    mutation: MutationType!
+    node: Comment
+}
+
+type AuthPayload {
+    user: User!
+    token: String!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String
+    password: String!
+    posts: [Post!]!
+    comments: [Comment!]!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type Post {
+    id: ID!
+    title: String!
+    body: String!
+    published: Boolean!
+    author: User!
+    comments: [Comment!]!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type Comment {
+    id: ID!
+    title: String!
+    body: String!
+    author: User!
+    post: Post!
+    createdAt: String!
+    updatedAt: String!
+}
